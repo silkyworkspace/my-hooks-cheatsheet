@@ -1,0 +1,43 @@
+<!--
+  404.html
+  ----------------------------------------
+  GitHub Pages で SPA（Reactなどのシングルページアプリ）を動かすためのフォールバック設定。
+  サーバー側ルーティングがないため、/about や /contact などのパスに直接アクセスすると404になる。
+  そこで、このページで一度 index.html に戻し、元のURLをReact Routerで復元する。
+-->
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+
+    <script>
+        // ================================
+        // 🚀 処理の概要：
+        // 1. 現在アクセスしているURLパス（例: /my-hooks-cheatsheet/about）を保存
+        // 2. 一度トップ（index.html）へリダイレクト
+        // 3. index.html 側で元のパスを復元する
+        // ================================
+
+        // 現在のパス情報（パス名＋クエリ＋ハッシュ）を sessionStorage に保存
+        sessionStorage.redirect = location.pathname + location.search + location.hash;
+
+        // トップページ（index.html）へリダイレクト
+        // ※ GitHub Pages でのリポジトリ名に合わせて変更する
+        location.replace('/my-hooks-cheatsheet/');
+    </script>
+
+    <noscript>
+        <!-- JavaScript が無効な場合のフォールバック -->
+        このサイトは JavaScript を必要とします。トップへ戻ります。
+        <!-- 自動的にトップページへリダイレクト -->
+        <meta http-equiv="refresh" content="0; url=/my-hooks-cheatsheet/" />
+    </noscript>
+</head>
+
+<body>
+    <!-- ここには何も表示されない。すぐに index.html に遷移する。 -->
+</body>
+
+</html>

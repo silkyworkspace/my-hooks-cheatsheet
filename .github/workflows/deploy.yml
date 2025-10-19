@@ -1,0 +1,76 @@
+# ===============================================
+# GitHub Actions ワークフロー
+# React(Vite) プロジェクトを GitHub Pages に自動デプロイする設定
+# ファイルパス: .github/workflows/deploy.yml
+# ===============================================
+
+name: My-Hooks-CheatSheet
+
+# -----------------------------------------------
+# このワークフローを「いつ」実行するか
+# -----------------------------------------------
+on:
+  push:
+    branches: [ "main" ]   # main ブランチに push されたとき自動実行
+  workflow_dispatch:        # 手動でも実行できるようにしておく（Actions画面から）
+
+# -----------------------------------------------
+# GitHub Pages にデプロイするための権限設定
+# -----------------------------------------------
+permissions:
+  contents: read      # リポジトリの内容を読み取る権限
+  pages: write        # Pages に書き込む権限（＝デプロイ用）
+  id-token: write     # IDトークンの発行を許可（セキュアな認証）
+
+# 同時に実行されたとき、古いジョブをキャンセルして最新を優先
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+# -----------------------------------------------
+# メインのジョブ定義
+# -----------------------------------------------
+jobs:
+  build:
+    runs-on: ubuntu-latest    # 最新の Ubuntu 環境で実行
+    steps:
+      # 1️⃣ リポジトリのコードを取得
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Node.js のセットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"   # 使用している Node バージョンに合わせる
+          cache: "npm"         # npm パッケージをキャッシュして高速化
+
+      # 3️⃣ 依存パッケージのインストール
+      - name: Install dependencies
+        run: npm ci            # package-lock.json を利用してクリーンインストール
+        # lockファイルが無い場合は npm install に変えてもOK
+
+      # 4️⃣ Vite のビルド
+      - name: Build project
+        run: npm run build     # dist フォルダが生成される（vite.config.jsで設定済）
+
+      # 5️⃣ ビルド結果を GitHub Pages に渡す準備
+      - name: Upload build output
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist         # ビルド成果物のディレクトリ（Viteは dist）
+
+  # -----------------------------------------------
+  # デプロイ処理（build が終わった後に実行）
+  # -----------------------------------------------
+  deploy:
+    needs: build               # build ジョブが完了してから実行
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      # 6️⃣ GitHub Pages へデプロイ
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
