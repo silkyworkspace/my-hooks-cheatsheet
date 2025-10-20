@@ -9,6 +9,9 @@ export default function UseState() {
     // ハンバーガーメニューのstate
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    // タブ切り替えのstate
+    const [activeTab, setActiveTab] = useState('home')
+
     return (
         <div className={styles.pageContainer}>
             <header className={styles.pageHeader}>
@@ -153,6 +156,120 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
                     </ul>
                 </div>
             </section>
+
+            {/* デモ3: タブ切り替え */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ3: タブ切り替え</h2>
+                <p>コンテンツの切り替え表示 - よくあるUI</p>
+
+                <div className={styles.demoBox}>
+
+                    <div className={styles.tabs}>
+                        <button
+                            className={activeTab === 'home' ? styles.active : ''}
+                            onClick={() => setActiveTab('home')}
+                        >
+                            🏠 ホーム
+                        </button>
+                        <button
+                            className={activeTab === 'about' ? styles.active : ''}
+                            onClick={() => setActiveTab('about')}
+                        >
+                            👤 About
+                        </button>
+                        <button
+                            className={activeTab === 'services' ? styles.active : ''}
+                            onClick={() => setActiveTab('services')}
+                        >
+                            💼 サービス
+                        </button>
+                        <button
+                            className={activeTab === 'contact' ? styles.active : ''}
+                            onClick={() => setActiveTab('contact')}
+                        >
+                            📧 お問い合わせ
+                        </button>
+                    </div>
+                    <div className={styles.tabContent}>
+                        {/* &&の左側の条件がtrueのときだけ右側を実行（表示） */}
+                        {activeTab === 'home' && (
+                            <div className={styles.tabPanel}>
+                                <h3>ホーム</h3>
+                                <p>ようこそ！このサイトではReact Hooksの実装方法を学べます。</p>
+                                <p>各タブをクリックして、コンテンツが切り替わる様子を確認してください。</p>
+                            </div>
+                        )}
+                        {activeTab === 'about' && (
+                            <div className={styles.tabPanel}>
+                                <h3>About</h3>
+                                <p>このチートシートは、Webサイト制作でよく使うReact Hooksをまとめたものです。</p>
+                                <ul>
+                                    <li>実務で使える実装例</li>
+                                    <li>コピペで使えるコード</li>
+                                    <li>分かりやすい解説</li>
+                                </ul>                        </div>
+                        )}
+                        {activeTab === 'services' && (
+                            <div className={styles.tabPanel}>
+                                <h3>サービス</h3>
+                                <p>提供しているサービス一覧：</p>
+                                <ul>
+                                    <li>useState - 状態管理</li>
+                                    <li>useEffect - 副作用処理</li>
+                                    <li>useContext - グローバル状態</li>
+                                    <li>Custom Hooks - 独自フック</li>
+                                </ul>
+                            </div>
+                        )}
+
+                        {activeTab === 'contact' && (
+                            <div className={styles.tabPanel}>
+                                <h3>お問い合わせ</h3>
+                                <p>ご質問やフィードバックはGitHubのIssuesからお願いします。</p>
+                                <p>📧 Email: div.sawa@example.com</p>
+                                <p>🐙 GitHub: @div.sawa</p>
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+
+
+
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <pre><code>{`// stateの定義
+const [activeTab, setActiveTab] = useState('home');
+
+// タブボタン
+<button 
+  className={activeTab === 'home' ? 'active' : ''}
+  onClick={() => setActiveTab('home')}
+>
+  ホーム
+</button>
+
+// コンテンツ表示
+{activeTab === 'home' && (
+  <div>ホームのコンテンツ</div>
+)}
+
+{activeTab === 'about' && (
+  <div>Aboutのコンテンツ</div>
+)}`}</code></pre>
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>useState('home')</strong> - 初期値を文字列で指定</li>
+                        <li><strong>setActiveTab('about')</strong> - クリックで値を変更</li>
+                        <li><strong>条件付きレンダリング</strong> - activeTabの値によって表示を切替</li>
+                        <li><strong>&&演算子</strong> - 条件がtrueの時だけ要素を表示</li>
+                    </ul>
+                </div>            </section>
+
 
 
 
