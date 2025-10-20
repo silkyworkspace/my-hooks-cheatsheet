@@ -10,7 +10,39 @@ export default function UseState() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // タブ切り替えのstate
-    const [activeTab, setActiveTab] = useState('home')
+    const [activeTab, setActiveTab] = useState('home');
+
+    // アコーディオンのstate
+    const [openAccordion, setOpenAccordion] = useState(null);
+
+    // アコーディオンのデータ
+    const faqItems = [
+        {
+            id: 1,
+            question: 'useStateとは何ですか？',
+            answer: 'useStateはReactのフックの一つで、関数コンポーネント内で状態を管理するために使います。クラスコンポーネントのthis.stateに相当する機能を提供します。'
+        },
+        {
+            id: 2,
+            question: 'いつuseStateを使うべきですか？',
+            answer: 'UIの表示状態（開閉、選択状態など）、フォームの入力値、カウンターなど、コンポーネント内で変化する値を扱う時に使います。'
+        },
+        {
+            id: 3,
+            question: 'useStateの注意点は？',
+            answer: '直接stateを変更してはいけません。必ずsetState関数を使って更新します。また、オブジェクトや配列を更新する時は、新しいオブジェクト/配列を作成する必要があります。'
+        },
+        {
+            id: 4,
+            question: '複数のstateを使ってもいいですか？',
+            answer: 'はい、1つのコンポーネントで複数のuseStateを使うことができます。関連性の低い値は別々のstateに分けた方が管理しやすくなります。'
+        },
+        {
+            id: 5,
+            question: '初期値はどう決めますか？',
+            answer: '必要なデータ型に合わせて決めます。数値なら0、文字列なら空文字""、配列なら[]、オブジェクトなら{}、真偽値ならfalseなどが一般的です。'
+        },
+    ];
 
     return (
         <div className={styles.pageContainer}>
@@ -234,9 +266,6 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
                     </div>
                 </div>
 
-
-
-
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
                     <pre><code>{`// stateの定義
@@ -268,7 +297,89 @@ const [activeTab, setActiveTab] = useState('home');
                         <li><strong>条件付きレンダリング</strong> - activeTabの値によって表示を切替</li>
                         <li><strong>&&演算子</strong> - 条件がtrueの時だけ要素を表示</li>
                     </ul>
-                </div>            </section>
+                </div>
+            </section>
+
+            {/* デモ4: アコーディオン */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ4: アコーディオン</h2>
+                <p>FAQなどでよく使う開閉式コンテンツ</p>
+
+                <div className={styles.demoBox}>
+                    <div className={styles.accordion}>
+                        {faqItems.map((item) => (
+                            <div key={item.id} className={styles.accordionItem}>
+                                <button
+                                    className={`${styles.accordionTitle} ${openAccordion === item.id ? styles.active : ''
+                                        }`}
+                                    onClick={() => {
+                                        setOpenAccordion(
+                                            openAccordion === item.id ? null : item.id
+                                        )
+                                    }}>
+                                    <span className={styles.questionText}>
+                                        Q{item.id}. {item.question}
+                                    </span>
+                                    <span className={styles.icon}>
+                                        {openAccordion === item.id ? '-' : '+'}
+                                    </span>
+                                </button>
+                                {
+                                    openAccordion === item.id && (
+                                        <div className={styles.accordionContent}>
+                                            <p>{item.answer}</p>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <pre><code>{`// stateの定義（開いている項目のIDを保存）
+const [openAccordion, setOpenAccordion] = useState(null);
+
+// データの定義
+const faqItems = [
+  { id: 1, question: '質問1', answer: '回答1' },
+  { id: 2, question: '質問2', answer: '回答2' },
+  // ...
+];
+
+// アコーディオンの実装
+{faqItems.map((item) => (
+  <div key={item.id}>
+    <button 
+      onClick={() => setOpenAccordion(
+        openAccordion === item.id ? null : item.id
+      )}
+    >
+      {item.question}
+    </button>
+    
+    {openAccordion === item.id && (
+      <div>{item.answer}</div>
+    )}
+  </div>
+))}`}</code></pre>
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>useState(null)</strong> - 初期状態は何も開いていない</li>
+                        <li><strong>map()で配列を展開</strong> - データから複数のコンポーネントを生成</li>
+                        <li><strong>三項演算子</strong> - クリック時に開閉を切り替え</li>
+                        <li><strong>key属性</strong> - 各項目にユニークなIDを指定</li>
+                        <li>同時に開けるのは1つだけ（排他的制御）</li>
+                    </ul>
+                </div>
+            </section>
+
+
+
 
 
 
