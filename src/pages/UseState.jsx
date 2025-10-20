@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom';
+import CodeBlock from '../components/CodeBlock';
 import styles from './UseState.module.css';
 
 export default function UseState() {
@@ -64,15 +65,6 @@ export default function UseState() {
                 </div>
             </section>
 
-            {/* ここにデモを1つずつ追加していきます */}
-
-            {/* 1. ハンバーガーメニュー - シンプルで理解しやすい
-                2. カウンター - useStateの基本を理解できる
-                3. タブ切り替え - 実務でよく使う
-                4. アコーディオン - FAQでよく使う
-                5. モーダル - ポップアップの基本 
-            */}
-
             {/* デモ1: カウンター */}
             <section className={styles.demoSection}>
                 <h2>🎨 デモ1: カウンター</h2>
@@ -104,14 +96,14 @@ export default function UseState() {
 
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
-                    <pre><code>{`// stateの定義
+                    <CodeBlock code={`// stateの定義
 const [count, setCount] = useState(0);
 
 // 使い方
 <button onClick={() => setCount(count - 1)}>−</button>
 <span>{count}</span>
 <button onClick={() => setCount(count + 1)}>+</button>
-<button onClick={() => setCount(0)}>リセット</button>`}</code></pre>
+<button onClick={() => setCount(0)}>リセット</button>`} />
                 </details>
 
                 <div className={styles.explanation}>
@@ -159,7 +151,7 @@ const [count, setCount] = useState(0);
                 </div>
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
-                    <pre><code>{`// stateの定義
+                    <CodeBlock code={`// stateの定義
 const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 // メニューボタン
@@ -178,7 +170,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
     <li><a href="#home">ホーム</a></li>
     {/* ... */}
   </ul>
-</nav>`}</code></pre>
+</nav>`} />
                 </details>
 
                 <div className={styles.explanation}>
@@ -271,7 +263,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false);
 
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
-                    <pre><code>{`// stateの定義
+                    <CodeBlock code={`// stateの定義
 const [activeTab, setActiveTab] = useState('home');
 
 // タブボタン
@@ -289,7 +281,7 @@ const [activeTab, setActiveTab] = useState('home');
 
 {activeTab === 'about' && (
   <div>Aboutのコンテンツ</div>
-)}`}</code></pre>
+)}`} />
                 </details>
 
                 <div className={styles.explanation}>
@@ -341,7 +333,7 @@ const [activeTab, setActiveTab] = useState('home');
 
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
-                    <pre><code>{`// stateの定義（開いている項目のIDを保存）
+                    <CodeBlock code={`// stateの定義（開いている項目のIDを保存）
 const [openAccordion, setOpenAccordion] = useState(null);
 
 // データの定義
@@ -366,9 +358,8 @@ const faqItems = [
       <div>{item.answer}</div>
     )}
   </div>
-))}`}</code></pre>
+))}`} />
                 </details>
-
                 <div className={styles.explanation}>
                     <h3>💡 ポイント</h3>
                     <ul>
@@ -449,7 +440,7 @@ const faqItems = [
 
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
-                    <pre><code>{`// stateの定義
+                    <CodeBlock code={`// stateの定義
 const [isModalOpen, setIsModalOpen] = useState(false);
 
 // モーダルを開くボタン
@@ -474,9 +465,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
       </button>
     </div>
   </div>
-)}`}</code></pre>
+)}`} />
                 </details>
-
                 <div className={styles.explanation}>
                     <h3>💡 ポイント</h3>
                     <ul>

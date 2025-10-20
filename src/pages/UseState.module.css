@@ -102,15 +102,6 @@
   background: var(--color-border);
 }
 
-.codeDetails pre {
-  background: var(--color-bg-code);
-  color: #abb2bf;
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  overflow-x: auto;
-  margin-top: var(--spacing-xs);
-}
-
 /****** カウンター ******/
 .counter {
   display: flex;
