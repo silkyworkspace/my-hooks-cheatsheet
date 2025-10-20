@@ -16,11 +16,11 @@ const router = createHashRouter([
   // 404ページ - すべての未定義ルートにマッチ
   {
     path: '*',
-    element: <UseState />
+    element: <NotFound />
   },
   {
     path: '/usestate',
-    element: <NotFound />
+    element: <UseState />
   },
 
 ]
