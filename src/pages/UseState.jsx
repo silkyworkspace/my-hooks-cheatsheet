@@ -15,6 +15,9 @@ export default function UseState() {
     // アコーディオンのstate
     const [openAccordion, setOpenAccordion] = useState(null);
 
+    // モーダルのstate
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     // アコーディオンのデータ
     const faqItems = [
         {
@@ -378,10 +381,114 @@ const faqItems = [
                 </div>
             </section>
 
+            {/* デモ5: モーダル */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ5: モーダルウィンドウ</h2>
+                <p>ポップアップ表示と外側クリックで閉じる処理</p>
 
+                <div className={styles.demoBox}>
+                    <button
+                        className={styles.primaryButton}
+                        onClick={() => { setIsModalOpen(true) }}>
+                        モーダルを開く
+                    </button>
 
+                    {
+                        isModalOpen && (
+                            <div
+                                className={styles.modalOverlay}
+                                onClick={() => setIsModalOpen(false)}
+                            >
+                                <div
+                                    className={styles.modalContent}
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    <div className={styles.modalHeader}>
+                                        <h3>お知らせ</h3>
+                                        <button
+                                            className={styles.closeButton}
+                                            onClick={() => setIsModalOpen(false)}
+                                            aria-label="閉じる"
+                                        >
+                                            ×
+                                        </button>
+                                    </div>
 
+                                    <div className={styles.modalBody}>
+                                        <p>これはモーダルウィンドウの例です。</p>
+                                        <p>以下の方法で閉じることができます：</p>
+                                        <ul>
+                                            <li>右上の「×」ボタンをクリック</li>
+                                            <li>「閉じる」ボタンをクリック</li>
+                                            <li>モーダルの外側（暗い部分）をクリック</li>
+                                        </ul>
+                                    </div>
 
+                                    <div className={styles.modalFooter}>
+                                        <button
+                                            className={styles.secondaryButton}
+                                            onClick={() => setIsModalOpen(false)}
+                                        >
+                                            キャンセル
+                                        </button>
+                                        <button
+                                            className={styles.primaryButton}
+                                            onClick={() => {
+                                                alert('確認しました！');
+                                                setIsModalOpen(false);
+                                            }}
+                                        >
+                                            確認
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <pre><code>{`// stateの定義
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+// モーダルを開くボタン
+<button onClick={() => setIsModalOpen(true)}>
+  モーダルを開く
+</button>
+
+// モーダルの実装
+{isModalOpen && (
+  <div 
+    className="modalOverlay"
+    onClick={() => setIsModalOpen(false)}  // 外側クリックで閉じる
+  >
+    <div 
+      className="modalContent"
+      onClick={(e) => e.stopPropagation()}  // 内側クリックは伝播させない
+    >
+      <h3>タイトル</h3>
+      <p>コンテンツ</p>
+      <button onClick={() => setIsModalOpen(false)}>
+        閉じる
+      </button>
+    </div>
+  </div>
+)}`}</code></pre>
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>useState(false)</strong> - 初期状態は閉じている</li>
+                        <li><strong>条件付きレンダリング</strong> - isModalOpenがtrueの時だけ表示</li>
+                        <li><strong>onClick on overlay</strong> - オーバーレイクリックで閉じる</li>
+                        <li><strong>e.stopPropagation()</strong> - モーダル内クリックは親に伝播させない</li>
+                        <li><strong>固定配置</strong> - position: fixed で画面中央に表示</li>
+                    </ul>
+                </div>
+
+            </section>
 
 
         </div>// .pageContainer
