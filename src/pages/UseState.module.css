@@ -110,3 +110,96 @@
   overflow-x: auto;
   margin-top: var(--spacing-xs);
 }
+
+/****** カウンター ******/
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.counterButton {
+  width: 60px;
+  height: 60px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-bg-primary);
+  color: var(--color-primary);
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.counterButton:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: scale(1.1);
+}
+
+.counterButton:active {
+  transform: scale(0.95);
+}
+
+.countDisplay {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+  min-width: 100px;
+  text-align: center;
+}
+
+.resetButton {
+  background: var(--color-text-secondary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.resetButton:hover {
+  background: var(--color-text-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.resetButton:active {
+  transform: translateY(0);
+}
+
+/* 説明セクション */
+.explanation {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+}
+
+.explanation h3 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.explanation ul {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+}
+
+.explanation li {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.6;
+}
+
+.explanation strong {
+  color: var(--color-text-primary);
+  font-family: 'Courier New', monospace;
+  background: var(--color-bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
