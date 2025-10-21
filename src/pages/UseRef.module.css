@@ -1,0 +1,138 @@
+/* UseEffect.module.css と同じ基本スタイルを使用 */
+
+/* 基本レイアウト */
+.pageContainer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.pageHeader {
+  margin-bottom: var(--spacing-xl);
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: var(--spacing-sm);
+}
+
+.backButton {
+  display: inline-block;
+  color: var(--color-primary);
+  text-decoration: none;
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-md);
+  transition: all var(--transition-normal);
+}
+
+.backButton:hover {
+  text-decoration: underline;
+  color: var(--color-primary-dark);
+}
+
+.pageHeader h1 {
+  font-size: var(--font-size-xxl);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+}
+
+.description {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+}
+
+/* 概要セクション */
+.overview {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.codeBlock {
+  background: var(--color-bg-code);
+  color: var(--color-primary);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  margin-top: var(--spacing-sm);
+  overflow-x: auto;
+}
+
+/* デモ用の共通スタイル */
+.demoSection {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.demoSection h2 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.demoSection > p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.demoBox {
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  transition: all var(--transition-normal);
+}
+
+.demoBox:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* コード表示用 */
+.codeDetails {
+  margin-top: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.codeDetails summary {
+  color: var(--color-primary);
+  font-weight: bold;
+  padding: var(--spacing-xs);
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.codeDetails summary:hover {
+  background: var(--color-border);
+}
+
+/* 説明セクション */
+.explanation {
+  background: var(--color-bg-secondary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+}
+
+.explanation h3 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.explanation ul {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+}
+
+.explanation li {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.6;
+}
+
+.explanation strong {
+  color: var(--color-text-primary);
+  font-family: 'Courier New', monospace;
+  background: var(--color-bg-tertiary);
+  padding: 2px 6px;
+  border-radius: 3px;
+}

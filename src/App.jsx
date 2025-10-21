@@ -3,6 +3,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home'
 import UseState from './pages/UseState';
 import UseEffect from './pages/UseEffect';
+import UseRef from './pages/UseRef';
 import NotFound from './pages/NotFound';
 import ErrorFallback from './pages/ErrorFallback';
 import './App.css'
@@ -21,6 +22,10 @@ const router = createHashRouter([
   {
     path: '/useeffect',
     element: <UseEffect />
+  },
+  {
+    path: '/useref',
+    element: <UseRef />
   },
   // 404ページ - すべての未定義ルートにマッチ
   {
