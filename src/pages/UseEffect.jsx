@@ -31,6 +31,12 @@ export default function UseEffect() {
         { id: 4, title: 'スライド 4', color: '#ef4444', emoji: '🎨' },
     ];
 
+    // デモ5: ウィンドウサイズ検知のstate
+    const [windowSize, setWindowSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+
 
     // デモ1: スクロールイベントを監視
     useEffect(() => {
@@ -133,12 +139,13 @@ export default function UseEffect() {
         };
     }, [isTimerRunning]); // isTimerRunningが変わるたびに再実行
 
+    const slideLength = slides.length;
     // デモ4-2: 自動スライドショー
     useEffect(() => {
         let slideIntervalId;  // ← スライド用
 
         slideIntervalId = setInterval(() => {
-            setAutoSlideIndex(prev => (prev + 1) % slides.length); // 0, 1, 2, 3を返す
+            setAutoSlideIndex(prev => (prev + 1) % slideLength); // 0, 1, 2, 3を返す
         }, 3000); // 3秒ごとに次のスライド
         // prev = 0
         // (0 + 1) % 4 = 1 % 4 = 1
@@ -161,7 +168,7 @@ export default function UseEffect() {
         return () => {
             clearInterval(slideIntervalId);
         };
-    }, []); // 空配列 = マウント時のみ
+    }, [slideLength]); // 空配列 = マウント時のみ
 
     // タイマー操作関数
     const startTimer = () => setIsTimerRunning(true);
@@ -177,6 +184,41 @@ export default function UseEffect() {
         const secs = totalSeconds % 60;
         return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     };
+
+    // デモ5: ウィンドウリサイズを監視
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        };
+
+        // リサイズイベントを登録
+        window.addEventListener('resize', handleResize);
+
+        // クリーンアップ
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []); // 空配列 = マウント時のみ
+
+    // デバイスタイプを判定
+    const getDeviceType = () => {
+        const width = windowSize.width;
+        if (width < 640) return 'Mobile';
+        if (width < 1024) return 'Tablet';
+        return 'Desktop';
+    }
+
+    // ブレイクポイント判定
+    const breakpoints = {
+        isMobile: windowSize.width < 640,
+        isTablet: windowSize.width >= 640 && windowSize.width < 1024,
+        isDesktop: windowSize.width >= 1024,
+    };
+
+
 
     return (
         <div className={styles.pageContainer}>
@@ -604,6 +646,167 @@ useEffect(() => {
                         <li><strong>prev =&gt; prev + 1</strong> - 関数型更新で最新の値を取得</li>
                         <li><strong>依存配列の使い分け</strong> - [] vs [isTimerRunning]</li>
                         <li><strong>クリーンアップを忘れると</strong> - タイマーが残り続けてバグの原因に</li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* デモ5: ウィンドウサイズ検知 */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ5: ウィンドウサイズ検知</h2>
+                <p>画面サイズに応じた動的な制御 - ブラウザをリサイズしてみてください</p>
+
+                <div className={styles.demoBox}>
+                    {/* 現在のウィンドウサイズ */}
+                    <div className={styles.sizeInfo}>
+                        <h3>📏 現在のウィンドウサイズ</h3>
+                        <div className={styles.sizeGrid}>
+                            <div className={styles.sizeItem}>
+                                <span className={styles.sizeLabel}>幅:</span>
+                                <span className={styles.sizeValue}>{windowSize.width}px</span>
+                            </div>
+                            <div className={styles.sizeItem}>
+                                <span className={styles.sizeLabel}>高さ:</span>
+                                <span className={styles.sizeValue}>{windowSize.height}px</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* デバイスタイプ判定 */}
+                    <div className={styles.deviceInfo}>
+                        <h3>📱 デバイスタイプ</h3>
+                        <div className={styles.deviceBadge}>
+                            {getDeviceType() === 'Mobile' && '📱 Mobile'}
+                            {getDeviceType() === 'Tablet' && '📱 Tablet'}
+                            {getDeviceType() === 'Desktop' && '🖥️ Desktop'}
+                        </div>
+                        <p className={styles.deviceDescription}>
+                            {getDeviceType() === 'Mobile' && '640px未満: スマートフォン向け表示'}
+                            {getDeviceType() === 'Tablet' && '640px〜1024px: タブレット向け表示'}
+                            {getDeviceType() === 'Desktop' && '1024px以上: デスクトップ向け表示'}
+                        </p>
+                    </div>
+
+                    {/* ブレークポイント判定 */}
+                    <div className={styles.breakpointInfo}>
+                        <h3>🎯 ブレークポイント判定</h3>
+                        <div className={styles.breakpointGrid}>
+                            <div className={`${styles.breakpointItem} ${breakpoints.isMobile ? styles.active : ''
+                                }`}>
+                                <span className={styles.breakpointIcon}>
+                                    {breakpoints.isMobile ? '✅' : '⬜'}
+                                </span>
+                                <span>Mobile (&lt; 640px)</span>
+                            </div>
+                            <div className={`${styles.breakpointItem} ${breakpoints.isTablet ? styles.active : ''
+                                }`}>
+                                <span className={styles.breakpointIcon}>
+                                    {breakpoints.isTablet ? '✅' : '⬜'}
+                                </span>
+                                <span>Tablet (640px〜1024px)</span>
+                            </div>
+                            <div className={`${styles.breakpointItem} ${breakpoints.isDesktop ? styles.active : ''
+                                }`}>
+                                <span className={styles.breakpointIcon}>
+                                    {breakpoints.isDesktop ? '✅' : '⬜'}
+                                </span>
+                                <span>Desktop (≥ 1024px)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 実用例: レスポンシブコンテンツ */}
+                    <div className={styles.responsiveDemo}>
+                        <h3>💡 実用例: レスポンシブコンテンツ</h3>
+                        {breakpoints.isMobile && (
+                            <div className={styles.mobileContent}>
+                                <p>📱 モバイル専用コンテンツ</p>
+                                <ul>
+                                    <li>シンプルなレイアウト</li>
+                                    <li>大きなボタン</li>
+                                    <li>縦スクロール最適化</li>
+                                </ul>
+                            </div>
+                        )}
+
+                        {breakpoints.isTablet && (
+                            <div className={styles.tabletContent}>
+                                <p>📱 タブレット専用コンテンツ</p>
+                                <ul>
+                                    <li>2カラムレイアウト</li>
+                                    <li>サイドバー付き</li>
+                                    <li>中サイズの画像</li>
+                                </ul>
+                            </div>
+                        )}
+
+                        {breakpoints.isDesktop && (
+                            <div className={styles.desktopContent}>
+                                <p>🖥️ デスクトップ専用コンテンツ</p>
+                                <ul>
+                                    <li>3カラムレイアウト</li>
+                                    <li>ホバー効果</li>
+                                    <li>高解像度画像</li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <CodeBlock code={`// stateの定義
+const [windowSize, setWindowSize] = useState({
+  width: window.innerWidth,
+  height: window.innerHeight,
+});
+
+// リサイズイベントを監視
+useEffect(() => {
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  window.addEventListener('resize', handleResize);
+
+  // クリーンアップ
+  return () => {
+    window.removeEventListener('resize', handleResize);
+  };
+}, []);
+
+// デバイスタイプ判定
+const getDeviceType = () => {
+  const width = windowSize.width;
+  if (width < 640) return 'Mobile';
+  if (width < 1024) return 'Tablet';
+  return 'Desktop';
+};
+
+// ブレークポイント判定
+const breakpoints = {
+  isMobile: windowSize.width < 640,
+  isTablet: windowSize.width >= 640 && windowSize.width < 1024,
+  isDesktop: windowSize.width >= 1024,
+};
+
+// 使用例
+// 左がtrueの時だけ右側を表示（評価）する
+{breakpoints.isMobile && <MobileMenu />}
+{breakpoints.isDesktop && <DesktopNav />}`} />
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>window.innerWidth/Height</strong> - ウィンドウの幅と高さを取得</li>
+                        <li><strong>resize イベント</strong> - ウィンドウサイズが変わるたびに発火</li>
+                        <li><strong>クリーンアップ必須</strong> - メモリリーク防止</li>
+                        <li><strong>オブジェクトでstate管理</strong> - 幅と高さをまとめて管理</li>
+                        <li><strong>条件分岐で出し分け</strong> - CSSではできない完全な切り替え</li>
+                        <li><strong>実務での使い所</strong> - ナビゲーション、サイドバー、レイアウト切り替え</li>
                     </ul>
                 </div>
             </section>
