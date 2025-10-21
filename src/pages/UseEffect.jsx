@@ -13,6 +13,11 @@ export default function UseEffect() {
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0); // 前のスクロール位置
 
+    // デモ3: データフェッチのstate
+    const [users, setUsers] = useState([]); // 取得する情報（配列）
+    const [loading, setLoading] = useState(false); // 読み込み中かどうか
+    const [error, setError] = useState(false); // エラーが出ているかどうか
+
 
     // デモ1: スクロールイベントを監視
     useEffect(() => {
@@ -70,8 +75,31 @@ export default function UseEffect() {
         }
     }, [lastScrollY]); // lastScrollYが変わるたびに実行
 
+    // デモ3: データフェッチ
+    const fetchUsers = async () => {
+        setLoading(true);
+        setError(null);
 
+        try {
+            const res = await fetch('https://jsonplaceholder.typicode.com/users');
 
+            if (!res.ok) {
+                throw new Error('データの取得に失敗しました');
+            }
+
+            const data = await res.json();
+            setUsers(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // コンポーネントマウント時にデータを取得
+    useEffect(() => {
+        fetchUsers();
+    }, []) // 空配列 = マウント時のみ実行
 
     return (
         <div className={styles.pageContainer}>
@@ -89,8 +117,6 @@ export default function UseEffect() {
                     <code>useEffect(() =&gt; &#123; /* 副作用の処理 */ &#125;, [依存配列]);</code>
                 </div>
             </section>
-
-            {/* ここにデモを追加していきます */}
 
             {/* デモ1: スクロール位置検知 */}
             <section className={styles.demoSection}>
@@ -260,12 +286,118 @@ useEffect(() => {
                     </ul>
                 </div>
             </section>
+
+            {/* デモ3: データフェッチ */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ3: データフェッチ（API連携）</h2>
+                <p>外部APIからデータを取得して表示</p>
+
+                <div className={styles.demoBox}>
+                    <div className={styles.fetchControls}>
+                        <button
+                            className={styles.fetchButton}
+                            onClick={fetchUsers}
+                            disabled={loading}
+                        >
+                            {loading ? '読み込み中...' : 'データを再取得'}
+                        </button>
+                    </div>
+
+                    {/* ローディング表示 */}
+                    {loading && (
+                        <div className={styles.loadingContainer}>
+                            <div className={styles.spinner}></div>
+                            <p>データを読み込んでいます...</p>
+                        </div>
+                    )}
+
+                    {/* エラー表示 */}
+                    {error && (
+                        <div className={styles.errorContainer}>
+                            <p className={styles.errorIcon}>⚠️</p>
+                            <p className={styles.errorMessage}>{error}</p>
+                        </div>
+                    )}
+
+                    {/* データ表示 */}
+                    {!loading && !error && users.length > 0 && (
+                        <div className={styles.usersGrid}>
+                            {users.slice(0, 6).map((user) => (
+                                <div key={user.id} className={styles.userCard}>
+                                    <div className={styles.userAvatar}>
+                                        {user.name.charAt(0)}
+                                    </div>
+                                    <h4 className={styles.userName}>{user.name}</h4>
+                                    <p className={styles.userEmail}>{user.email}</p>
+                                    <p className={styles.userCompany}>{user.company.name}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* データ件数表示 */}
+                    {!loading && !error && users.length > 0 && (
+                        <p className={styles.dataInfo}>
+                            全{users.length}件のデータを取得しました（表示: 6件）
+                        </p>
+                    )}
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <CodeBlock code={`// stateの定義
+const [users, setUsers] = useState([]); // 取得する情報（配列）
+const [loading, setLoading] = useState(false); // 読み込み中かどうか
+const [error, setError] = useState(null); // エラーが出ているかどうか
+
+// データ取得関数
+const fetchUsers = async () => {
+  setLoading(true);
+  setError(null);
+
+  try {
+    const response = await fetch('https://api.example.com/users');
+    
+    if (!response.ok) {
+      throw new Error('データの取得に失敗しました');
+    }
+
+    const data = await response.json();
+    setUsers(data);
+  } catch (err) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// マウント時にデータを取得
+useEffect(() => {
+  fetchUsers();
+}, []); // 空配列 = マウント時のみ
+
+// データ表示
+{loading && <div>読み込み中...</div>}
+{error && <div>エラー: {error}</div>}
+{users.map(user => (
+  <div key={user.id}>{user.name}</div>
+))}`} />
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>async/await</strong> - 非同期処理を同期的に書ける</li>
+                        <li><strong>try/catch/finally</strong> - エラーハンドリングとローディング管理</li>
+                        <li><strong>loading state</strong> - データ取得中の状態を管理</li>
+                        <li><strong>error state</strong> - エラー発生時のメッセージを表示</li>
+                        <li><strong>空の依存配列[]</strong> - マウント時のみ実行（初回1回だけ）</li>
+                        <li><strong>条件付きレンダリング</strong> - loading/error/dataで表示を切り替え</li>
+                    </ul>
+                </div>
+            </section>
+
+
         </div>
-
-
-
-
-
-
     );
 }
