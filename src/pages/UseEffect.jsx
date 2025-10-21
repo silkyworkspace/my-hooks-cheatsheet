@@ -18,6 +18,19 @@ export default function UseEffect() {
     const [loading, setLoading] = useState(false); // 読み込み中かどうか
     const [error, setError] = useState(false); // エラーが出ているかどうか
 
+    // デモ4: タイマーのstate
+    const [seconds, setSeconds] = useState(0); // カウント（経過秒数）
+    const [isTimerRunning, setIsTimerRunning] = useState(false); // タイマーが動作中かどうか（実行中/停止中）
+    const [autoSlideIndex, setAutoSlideIndex] = useState(0); // スライドのインデックス（何番目のスライドか: 0, 1, 2, 3...）
+
+    // スライドのデータ
+    const slides = [
+        { id: 1, title: 'スライド 1', color: '#10b981', emoji: '🌟' },
+        { id: 2, title: 'スライド 2', color: '#3b82f6', emoji: '🚀' },
+        { id: 3, title: 'スライド 3', color: '#f59e0b', emoji: '⭐' },
+        { id: 4, title: 'スライド 4', color: '#ef4444', emoji: '🎨' },
+    ];
+
 
     // デモ1: スクロールイベントを監視
     useEffect(() => {
@@ -100,6 +113,70 @@ export default function UseEffect() {
     useEffect(() => {
         fetchUsers();
     }, []) // 空配列 = マウント時のみ実行
+
+
+    // デモ4-1: カウントアップタイマー
+    useEffect(() => {
+        let timerIntervalId; // ← タイマーIDを保存する箱を用意（タイマーの識別番号）
+
+        if (isTimerRunning) {
+            timerIntervalId = setInterval(() => { // ← 箱にIDを保存
+                setSeconds(prev => prev + 1);
+            }, 1000); // 1秒ごとに実行
+        }
+
+        // クリーンアップ: コンポーネントアンマウント時にタイマー停止
+        return () => {
+            if (timerIntervalId) { // ← 箱からIDを取り出して停止
+                clearInterval(timerIntervalId);
+            }
+        };
+    }, [isTimerRunning]); // isTimerRunningが変わるたびに再実行
+
+    // デモ4-2: 自動スライドショー
+    useEffect(() => {
+        let slideIntervalId;  // ← スライド用
+
+        slideIntervalId = setInterval(() => {
+            setAutoSlideIndex(prev => (prev + 1) % slides.length); // 0, 1, 2, 3を返す
+        }, 3000); // 3秒ごとに次のスライド
+        // prev = 0
+        // (0 + 1) % 4 = 1 % 4 = 1
+        // → autoSlideIndex = 1
+
+        // prev = 1
+        // (1 + 1) % 4 = 2 % 4 = 2
+        // → autoSlideIndex = 2
+
+        // prev = 2
+        // (2 + 1) % 4 = 3 % 4 = 3
+        // → autoSlideIndex = 3
+
+        // prev = 3
+        // (3 + 1) % 4 = 4 % 4 = 0 ← 0に戻る！
+        // → autoSlideIndex = 0
+        // ... 以降ループ
+
+        // クリーンアップ: コンポーネントアンマウント時にタイマー停止
+        return () => {
+            clearInterval(slideIntervalId);
+        };
+    }, []); // 空配列 = マウント時のみ
+
+    // タイマー操作関数
+    const startTimer = () => setIsTimerRunning(true);
+    const stopTimer = () => setIsTimerRunning(false);
+    const resetTimer = () => {
+        setIsTimerRunning(false);
+        setSeconds(0);
+    };
+
+    // 時間を MM:SS 形式に変換
+    const formatTime = (totalSeconds) => {
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = totalSeconds % 60;
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    };
 
     return (
         <div className={styles.pageContainer}>
@@ -397,6 +474,139 @@ useEffect(() => {
                 </div>
             </section>
 
+            {/* デモ4: タイマー処理 */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ4: タイマー処理</h2>
+                <p>setIntervalを使ったタイマーと自動スライドショー</p>
+
+                <div className={styles.demoBox}>
+                    {/* カウントアップタイマー */}
+                    <div className={styles.timerSection}>
+                        <h3>⏱️ カウントアップタイマー</h3>
+                        <div className={styles.timerDisplay}>
+                            {formatTime(seconds)}
+                        </div>
+                        <div className={styles.timerControls}>
+                            {!isTimerRunning ? (
+                                <button
+                                    className={styles.timerButton}
+                                    onClick={startTimer}
+                                >
+                                    ▶️ スタート
+                                </button>
+                            ) : (
+                                <button
+                                    className={`${styles.timerButton} ${styles.stop}`}
+                                    onClick={stopTimer}
+                                >
+                                    ⏸️ ストップ
+                                </button>
+                            )}
+                            <button
+                                className={`${styles.timerButton} ${styles.reset}`}
+                                onClick={resetTimer}
+                            >
+                                🔄 リセット
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 自動スライドショー */}
+                    <div className={styles.slideSection}>
+                        <h3>🎬 自動スライドショー（3秒ごと）</h3>
+                        <div className={styles.slideContainer}>
+                            <div
+                                className={styles.slide}
+                                style={{ backgroundColor: slides[autoSlideIndex].color }}
+                            >
+                                <span className={styles.slideEmoji}>
+                                    {slides[autoSlideIndex].emoji}
+                                </span>
+                                <h4>{slides[autoSlideIndex].title}</h4>
+                            </div>
+                        </div>
+                        <div className={styles.slideIndicators}>
+                            {slides.map((slide, index) => (
+                                <button
+                                    key={slide.id}
+                                    className={`${styles.indicator} ${index === autoSlideIndex ? styles.active : ''
+                                        }`}
+                                    onClick={() => setAutoSlideIndex(index)}
+                                    aria-label={`スライド ${index + 1}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <CodeBlock code={`// stateの定義
+const [seconds, setSeconds] = useState(0); // カウント（経過秒数）
+const [isTimerRunning, setIsTimerRunning] = useState(false);// タイマーが動作中かどうか（実行中/停止中）
+
+// カウントアップタイマー
+useEffect(() => {
+  let timerIntervalId; // ← タイマーIDを保存する箱を用意（タイマーの識別番号）
+
+  if (isTimerRunning) {
+    timerIntervalId = setInterval(() => { // ← 箱にIDを保存
+      setSeconds(prev => prev + 1);
+    }, 1000); // 1秒ごと
+  }
+
+  // クリーンアップ: タイマー停止
+  return () => {
+    if (timerIntervalId) { // ← 箱からIDを取り出して停止
+      clearInterval(timerIntervalId);
+    }
+  };
+}, [isTimerRunning]);
+
+// 自動スライドショー
+const [slideIndex, setSlideIndex] = useState(0); // スライドのインデックス（何番目のスライドか: 0, 1, 2, 3...）
+
+useEffect(() => {
+  let slideIntervalId;  // ← スライド用
+  slideIntervalId = setInterval(() => {
+    setSlideIndex(prev => (prev + 1) % slides.length); // 0, 1, 2, 3を返す
+  }, 3000); // 3秒ごと
+// prev = 0
+// (0 + 1) % 4 = 1 % 4 = 1
+// → autoSlideIndex = 1
+
+// prev = 1
+// (1 + 1) % 4 = 2 % 4 = 2
+// → autoSlideIndex = 2
+
+// prev = 2
+// (2 + 1) % 4 = 3 % 4 = 3
+// → autoSlideIndex = 3
+
+// prev = 3
+// (3 + 1) % 4 = 4 % 4 = 0 ← 0に戻る！
+// → autoSlideIndex = 0
+// ... 以降ループ
+
+  // クリーンアップ: 必ず停止
+  return () => {
+    clearInterval(slideIntervalId);
+  };
+}, []); // 空配列 = マウント時のみ`} />
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>setInterval</strong> - 一定間隔で処理を実行</li>
+                        <li><strong>clearInterval</strong> - タイマーを停止（必須！）</li>
+                        <li><strong>return文でクリーンアップ</strong> - メモリリーク防止</li>
+                        <li><strong>prev =&gt; prev + 1</strong> - 関数型更新で最新の値を取得</li>
+                        <li><strong>依存配列の使い分け</strong> - [] vs [isTimerRunning]</li>
+                        <li><strong>クリーンアップを忘れると</strong> - タイマーが残り続けてバグの原因に</li>
+                    </ul>
+                </div>
+            </section>
 
         </div>
     );
