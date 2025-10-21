@@ -2,6 +2,7 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home'
 import UseState from './pages/UseState';
+import UseEffect from './pages/UseEffect';
 import NotFound from './pages/NotFound';
 import ErrorFallback from './pages/ErrorFallback';
 import './App.css'
@@ -13,16 +14,19 @@ const router = createHashRouter([
     path: '/', // リクエストパス
     element: <Home /> // ルーティングによって描画されるReact要素
   },
+  {
+    path: '/usestate',
+    element: <UseState />
+  },
+  {
+    path: '/useeffect',
+    element: <UseEffect />
+  },
   // 404ページ - すべての未定義ルートにマッチ
   {
     path: '*',
     element: <NotFound />
   },
-  {
-    path: '/usestate',
-    element: <UseState />
-  },
-
 ]
 );
 
@@ -38,12 +42,12 @@ function App() {
           console.error('Error caught:', error, errorInfo);
         }}
       >
-        
+
         <RouterProvider router={router} /> {/* アプリにルーター機能を付与 */}
 
       </ErrorBoundary>
     </>
-  )
+  );
 }
 
 export default App
