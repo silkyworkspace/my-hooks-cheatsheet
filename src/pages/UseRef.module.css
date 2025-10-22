@@ -414,9 +414,9 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.scrollSection p:last-of-type {
+/* .scrollSection p:last-of-type {
   margin-bottom: var(--spacing-md);
-}
+} */
 
 .placeholder {
   background: var(--color-primary);
@@ -451,4 +451,167 @@
 
 .scrollContent::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary-dark);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* 前回の値を保持デモ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.renderInfo {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px dashed var(--color-border);
+}
+
+.renderInfo h3 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.renderBadge {
+  background: var(--color-primary);
+  color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: var(--font-size-md);
+}
+
+.renderBadge strong {
+  font-size: var(--font-size-xl);
+  font-family: 'Courier New', monospace;
+}
+
+/* 値の追跡 */
+.valueTracker {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px dashed var(--color-border);
+}
+
+.valueTracker:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.valueTracker h3 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 値の表示 */
+.valueDisplay,
+.nameDisplay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.valueBox,
+.nameBox {
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  min-width: 150px;
+  text-align: center;
+}
+
+.valueLabel,
+.nameLabel {
+  display: block;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.valueNumber {
+  display: block;
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+}
+
+.nameValue {
+  display: block;
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+  font-weight: bold;
+  min-height: 1.5em;
+}
+
+.arrow {
+  font-size: 2rem;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+/* 変化の表示 */
+.valueChange {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  font-weight: bold;
+}
+
+.increase {
+  color: #059669;
+  font-size: var(--font-size-md);
+}
+
+.decrease {
+  color: #dc2626;
+  font-size: var(--font-size-md);
+}
+
+.noChange {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+}
+
+.nameChange {
+  text-align: center;
+  color: var(--color-primary);
+  font-weight: bold;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+/* コントロールボタン */
+.controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.countButton {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  min-width: 60px;
+  transition: all var(--transition-normal);
+}
+
+.countButton:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.countButton:active {
+  transform: translateY(0);
 }
