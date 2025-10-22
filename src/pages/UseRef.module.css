@@ -1,5 +1,3 @@
-/* UseEffect.module.css と同じ基本スタイルを使用 */
-
 /* 基本レイアウト */
 .pageContainer {
   max-width: 900px;
@@ -56,7 +54,7 @@
   overflow-x: auto;
 }
 
-/* デモ用の共通スタイル */
+/* デモセクション */
 .demoSection {
   margin-bottom: var(--spacing-xl);
   padding-bottom: var(--spacing-lg);
@@ -84,6 +82,14 @@
 
 .demoBox:hover {
   box-shadow: var(--shadow-sm);
+}
+
+/* 例4のタイトル（demoBoxの直下） */
+.demoBox > h3 {
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-border);
 }
 
 /* コード表示用 */
@@ -135,4 +141,199 @@
   background: var(--color-bg-tertiary);
   padding: 2px 6px;
   border-radius: 3px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* フォーカス制御デモ（例1〜3） */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.focusGroup {
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 2px dashed var(--color-border);
+}
+
+.focusGroup:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.focusGroup h3 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 入力欄 */
+.input,
+.textarea {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+  transition: all var(--transition-normal);
+  margin-bottom: var(--spacing-sm);
+  box-sizing: border-box;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* フォーカスボタン */
+.focusButton {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+}
+
+.focusButton:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.focusButton:active {
+  transform: translateY(0);
+}
+
+/* ヒント */
+.hint {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: var(--spacing-sm) 0 0 0;
+  padding: var(--spacing-sm);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* useRef vs useState 比較デモ（例4） */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.secondDemoBox {
+    margin-top: var(--spacing-lg);
+}
+
+.comparisonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.comparisonBox {
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.comparisonTitle {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-md);
+  margin: 0 0 var(--spacing-sm) 0;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.renderCounter {
+  background: var(--color-bg-primary);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+  font-size: var(--font-size-md);
+}
+
+.renderCounter strong {
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+  font-family: 'Courier New', monospace;
+}
+
+.comparisonNote {
+  font-size: var(--font-size-sm);
+  margin: var(--spacing-xs) 0 0 0;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+}
+
+/* 比較表 */
+.comparisonExplanation {
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.comparisonExplanation h4 {
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: var(--spacing-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparisonTable th {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.comparisonTable td {
+  color: var(--color-text-secondary);
+}
+
+.comparisonTable td strong {
+  color: var(--color-text-primary);
+}
+
+.comparisonTable .positive {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.comparisonTable .negative {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 640px) {
+  .comparisonTable {
+    font-size: var(--font-size-xs);
+  }
+  
+  .comparisonTable th,
+  .comparisonTable td {
+    padding: var(--spacing-xs);
+  }
 }
