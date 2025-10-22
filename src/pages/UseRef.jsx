@@ -620,8 +620,6 @@ prevCountRef.current = 1（前回）
                 </div>
             </section>
 
-
-
         </div> // .styles.pageContainer
     );
 }
