@@ -14,15 +14,38 @@ export default function UseRef() {
     const [stateValue, setStateValue] = useState('');
     const refRenderCount = useRef(0);
 
+    // デモ2: スムーススクロールのref
+    const section1Ref = useRef(null);
+    const section2Ref = useRef(null);
+    const section3Ref = useRef(null);
+    const topRef = useRef(null);
+
+
     // デモ1: ページ読み込み時に検索ボックスにフォーカス
     useEffect(() => {
         searchRef.current?.focus();
     }, []);
 
+    // スムーススクロール
+    const scrollToSection = (ref) => {
+        console.log('ref:', ref);                    // refオブジェクト全体
+        console.log('ref.current:', ref.current);    // DOM要素
+        console.log('scrollIntoView:', ref.current?.scrollIntoView);  // 関数
+
+        ref.current?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    };
 
 
     return (
         <div className={styles.pageContainer}>
+
+            {/* ページトップの目印 */}
+            <div ref={topRef}></div>
+
+
             <header className={styles.pageHeader}>
                 <Link to="/" className={styles.backButton}>← 戻る</Link>
                 <h1>useRef</h1>
@@ -198,42 +221,42 @@ useEffect(() => {
                 </div> {/* .styles.demoBox */}
 
                 <div className={styles.comparisonExplanation}>
-                <h4>📊 違いのまとめ</h4>
+                    <h4>📊 違いのまとめ</h4>
 
-                <table className={styles.comparisonTable}>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>useState</th>
-                            <th>useRef</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>再レンダリング</strong></td>
-                            <td className={styles.negative}>あり ⚠️</td>
-                            <td className={styles.positive}>なし ✅</td>
-                        </tr>
-                        <tr>
-                            <td><strong>値の保持</strong></td>
-                            <td className={styles.positive}>あり ✅</td>
-                            <td className={styles.positive}>あり ✅</td>
-                        </tr>
-                        <tr>
-                            <td><strong>画面表示</strong></td>
-                            <td className={styles.positive}>更新される ✅</td>
-                            <td className={styles.negative}>更新されない ⚠️</td>
-                        </tr>
-                        <tr>
-                            <td><strong>用途</strong></td>
-                            <td>画面に表示する値</td>
-                            <td>DOM参照・裏側の値</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table className={styles.comparisonTable}>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>useState</th>
+                                <th>useRef</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>再レンダリング</strong></td>
+                                <td className={styles.negative}>あり ⚠️</td>
+                                <td className={styles.positive}>なし ✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>値の保持</strong></td>
+                                <td className={styles.positive}>あり ✅</td>
+                                <td className={styles.positive}>あり ✅</td>
+                            </tr>
+                            <tr>
+                                <td><strong>画面表示</strong></td>
+                                <td className={styles.positive}>更新される ✅</td>
+                                <td className={styles.negative}>更新されない ⚠️</td>
+                            </tr>
+                            <tr>
+                                <td><strong>用途</strong></td>
+                                <td>画面に表示する値</td>
+                                <td>DOM参照・裏側の値</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </div> {/* .styles.comparisonExplanation */}
-                
+
                 <details className={styles.codeDetails}>
                     <summary>コードを表示</summary>
                     <CodeBlock code={`// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -286,6 +309,131 @@ inputRef.current?.focus();
 
 
             </section> {/* .styles.demoSection */}
+
+            {/* デモ2: スムーススクロール */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ2: スムーススクロール</h2>
+                <p>ボタンクリックで特定のセクションまでスムーズにスクロール</p>
+
+                <div className={styles.demoBox}>
+                    {/* ナビゲーションボタン */}
+                    <div className={styles.scrollNav}>
+                        <h3>📍 ナビゲーション</h3>
+                        <div className={styles.scrollButtons}>
+                            <button
+                                className={styles.scrollButton}
+                                onClick={() => scrollToSection(section1Ref)}
+                            >
+                                → セクション1へ
+                            </button>
+                            <button
+                                className={styles.scrollButton}
+                                onClick={() => scrollToSection(section2Ref)}
+                            >
+                                → セクション2へ
+                            </button>
+                            <button
+                                className={styles.scrollButton}
+                                onClick={() => scrollToSection(section3Ref)}
+                            >
+                                → セクション3へ
+                            </button>
+                            <button
+                                className={styles.scrollButton}
+                                onClick={() => scrollToSection(topRef)}
+                            >
+                                ↑ トップへ戻る
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* スクロール先のセクション */}
+                    <div className={styles.scrollContent}>
+                        {/* セクション1 */}
+                        <div ref={section1Ref} className={styles.scrollSection}>
+                            <h4>📌 セクション1</h4>
+                            <p>ここはセクション1です。useRefでこの要素への参照を保持しています。</p>
+                            <p>scrollIntoView()メソッドを使って、スムーズにスクロールできます。</p>
+                            <div className={styles.placeholder}>
+                                <p>🎯 スクロール先の目印</p>
+                            </div>
+                        </div>
+
+                        {/* セクション2 */}
+                        <div ref={section2Ref} className={styles.scrollSection}>
+                            <h4>📌 セクション2</h4>
+                            <p>ここはセクション2です。ページ内リンクのようにスムーズに移動します。</p>
+                            <p>実際のWebサイトでは、目次や「ページトップへ戻る」ボタンでよく使います。</p>
+                            <div className={styles.placeholder}>
+                                <p>🎯 スクロール先の目印</p>
+                            </div>
+                        </div>
+
+                        {/* セクション3 */}
+                        <div ref={section3Ref} className={styles.scrollSection}>
+                            <h4>📌 セクション3</h4>
+                            <p>ここはセクション3です。最後のセクションです。</p>
+                            <p>「トップへ戻る」ボタンで最上部まで一気にスクロールできます。</p>
+                            <div className={styles.placeholder}>
+                                <p>🎯 スクロール先の目印</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <CodeBlock code={`// refの作成
+const section1Ref = useRef(null);
+const section2Ref = useRef(null);
+const topRef = useRef(null);
+
+// スクロール関数
+const scrollToSection = (ref) => {
+  ref.current?.scrollIntoView({
+    behavior: 'smooth',  // スムーズにスクロール
+    block: 'start',      // 要素の上端に合わせる
+  });
+};
+
+// JSX: refを要素に紐付け
+<div ref={topRef}></div>  {/* トップの目印 */}
+
+<div ref={section1Ref}>
+  セクション1の内容
+</div>
+
+<div ref={section2Ref}>
+  セクション2の内容
+</div>
+
+// ボタン
+<button onClick={() => scrollToSection(section1Ref)}>
+  セクション1へ
+</button>
+
+<button onClick={() => scrollToSection(topRef)}>
+  トップへ戻る
+</button>`} />
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>scrollIntoView()</strong> - DOM要素をビューポートに表示</li>
+                        <li><strong>behavior: 'smooth'</strong> - スムーズなスクロールアニメーション</li>
+                        <li><strong>block: 'start'</strong> - 要素の上端をビューポートの上端に合わせる</li>
+                        <li><strong>目次・ページ内リンク</strong> - よく使われる実用パターン</li>
+                        <li><strong>「トップへ戻る」ボタン</strong> - 長いページで便利</li>
+                        <li><strong>アンカーリンクの代替</strong> - a要素を使わずにスクロール制御</li>
+                    </ul>
+                </div>
+            </section>
+
+
+
+
+
         </div> // .styles.pageContainer
     );
 }
