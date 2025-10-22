@@ -20,6 +20,12 @@ export default function UseRef() {
     const section3Ref = useRef(null);
     const topRef = useRef(null);
 
+    // デモ3: 前回の値を保持
+    const [count, setCount] = useState(0);
+    const [name, setName] = useState('');
+    const prevCountRef = useRef(0);
+    const prevNameRef = useRef('');
+    const renderCountRef = useRef(0);
 
     // デモ1: ページ読み込み時に検索ボックスにフォーカス
     useEffect(() => {
@@ -37,6 +43,23 @@ export default function UseRef() {
             block: 'start'
         });
     };
+
+    // レンダリング回数をカウント
+    renderCountRef.current = renderCountRef.current + 1;
+
+    // useEffectで前回の値を保存
+    useEffect(() => {
+        prevCountRef.current = count;
+
+        console.log('前回:', prevCountRef.current);
+        console.log('現在:', count);
+        console.log('変化:', count - prevCountRef.current);
+
+    }, [count]);
+
+    useEffect(() => {
+        prevNameRef.current = name;
+    }, [name]);
 
 
     return (
@@ -430,7 +453,172 @@ const scrollToSection = (ref) => {
                 </div>
             </section>
 
+            {/* デモ3: 前回の値を保持 */}
+            <section className={styles.demoSection}>
+                <h2>🎨 デモ3: 前回の値を保持</h2>
+                <p>useRefで前回の値を記憶し、現在の値と比較する</p>
 
+                <div className={styles.demoBox}>
+                    {/* レンダリング回数表示 */}
+                    <div className={styles.renderInfo}>
+                        <h3>🔄 レンダリング情報</h3>
+                        <div className={styles.renderBadge}>
+                            レンダリング回数: <strong>{renderCountRef.current}</strong>
+                        </div>
+                    </div>
+
+                    {/* 例1: カウンターの変化を追跡 */}
+                    <div className={styles.valueTracker}>
+                        <h3>📊 カウンターの変化を追跡</h3>
+
+                        <div className={styles.valueDisplay}>
+                            <div className={styles.valueBox}>
+                                <span className={styles.valueLabel}>前回の値:</span>
+                                <span className={styles.valueNumber}>{prevCountRef.current}</span>
+                            </div>
+                            <div className={styles.arrow}>→</div>
+                            <div className={styles.valueBox}>
+                                <span className={styles.valueLabel}>現在の値:</span>
+                                <span className={styles.valueNumber}>{count}</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.valueChange}>
+                            {count > prevCountRef.current && (
+                                <span className={styles.increase}>
+                                    📈 増加: +{count - prevCountRef.current}
+                                </span>
+                            )}
+                            {count < prevCountRef.current && (
+                                <span className={styles.decrease}>
+                                    📉 減少: {count - prevCountRef.current}
+                                </span>
+                            )}
+                            {count === prevCountRef.current && (
+                                <span className={styles.noChange}>
+                                    ➡️ 変化なし
+                                </span>
+                            )}
+                        </div>
+
+                        <div className={styles.controls}>
+                            <button
+                                className={styles.countButton}
+                                onClick={() => setCount(count - 1)}
+                            >
+                                −1
+                            </button>
+                            <button
+                                className={styles.countButton}
+                                onClick={() => setCount(count + 1)}
+                            >
+                                +1
+                            </button>
+                            <button
+                                className={styles.countButton}
+                                onClick={() => setCount(count + 5)}
+                            >
+                                +5
+                            </button>
+                            <button
+                                className={styles.resetButton}
+                                onClick={() => setCount(0)}
+                            >
+                                リセット
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 例2: 名前の変化を追跡 */}
+                    <div className={styles.valueTracker}>
+                        <h3>✏️ 名前の変化を追跡</h3>
+
+                        <div className={styles.nameDisplay}>
+                            <div className={styles.nameBox}>
+                                <span className={styles.nameLabel}>前回の名前:</span>
+                                <span className={styles.nameValue}>
+                                    {prevNameRef.current || '(未入力)'}
+                                </span>
+                            </div>
+                            <div className={styles.arrow}>→</div>
+                            <div className={styles.nameBox}>
+                                <span className={styles.nameLabel}>現在の名前:</span>
+                                <span className={styles.nameValue}>
+                                    {name || '(未入力)'}
+                                </span>
+                            </div>
+                        </div>
+
+                        {name !== prevNameRef.current && (
+                            <div className={styles.nameChange}>
+                                🔄 名前が変更されました
+                            </div>
+                        )}
+
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="名前を入力してください"
+                            className={styles.input}
+                        />
+                    </div>
+                </div>
+
+                <details className={styles.codeDetails}>
+                    <summary>コードを表示</summary>
+                    <CodeBlock code={`// stateの定義
+const [count, setCount] = useState(0);
+
+// 前回の値を保存するref
+const prevCountRef = useRef(0);
+
+// useEffectで前回の値を記憶
+useEffect(() => {
+  prevCountRef.current = count;
+}, [count]);  // countが変わるたびに実行
+
+// 使い方
+console.log('前回:', prevCountRef.current);
+console.log('現在:', count);
+console.log('変化:', count - prevCountRef.current);
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 動作の流れ
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+// 1. 初期レンダリング
+count = 0
+prevCountRef.current = 0
+
+// 2. ボタンクリック（+1）
+setCount(1) → 再レンダリング
+
+// 3. レンダリング中
+count = 1                    // 新しい値
+prevCountRef.current = 0     // まだ古い値
+
+// 4. useEffectが実行される
+prevCountRef.current = 1     // 更新
+
+// 5. 次のクリック時
+count = 1（現在）
+prevCountRef.current = 1（前回）
+で比較できる！`} />
+                </details>
+
+                <div className={styles.explanation}>
+                    <h3>💡 ポイント</h3>
+                    <ul>
+                        <li><strong>useRef + useEffect</strong> - 前回の値を記憶するパターン</li>
+                        <li><strong>再レンダリングなし</strong> - refの更新は画面に影響しない</li>
+                        <li><strong>useEffectのタイミング</strong> - レンダリング後に実行される</li>
+                        <li><strong>差分の計算</strong> - 現在の値と前回の値を比較</li>
+                        <li><strong>実用例</strong> - アニメーション、変化の検知、デバッグ</li>
+                        <li><strong>usePrevious フック</strong> - カスタムフックで再利用可能</li>
+                    </ul>
+                </div>
+            </section>
 
 
 
